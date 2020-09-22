@@ -1,23 +1,23 @@
 export const state = () => ({
   filterData: {},
-  paginationCount: 3,
+  paginationAmount: 3,
   currentPagination: 1,
   movieList: [
     {
-      'movie name': 'go',
-      'movie actor': 'Jone'
+      name: 'go',
+      actor: 'Jone'
     },
     {
-      'movie name': 'Hi',
-      'movie actor': 'Lena'
+      name: 'Hi',
+      actor: 'Lena'
     },
     {
-      'movie name': 'Yes',
+      name: 'Yes',
       actor: 'Goga'
     },
     {
-      'movie name': 'NO',
-      'movie actor': 'Nataly'
+      name: 'NO',
+      actor: 'Nataly'
     },
   ]
 })
@@ -25,19 +25,20 @@ export const state = () => ({
 export const getters = {
   GET_HEADER_LIST: state => {
     if(state.movieList === 0)
-      return ['movie name', 'movie actor']
+      return ['name', 'actor']
 
     return Object.keys(state.movieList[0])
   },
   GET_FILTERED_MOVIES_DATA: state => state.movieList,
   GET_CURRENT_PAGINATION: state => state.currentPagination,
-  GET_PAGINATION_AMOUNT: state => state.paginationCount,
+  GET_PAGINATION_TOTAL: ({movieList, paginationAmount}) => Math.ceil(movieList.length / paginationAmount),
+  GET_PAGINATION_AMOUNT: state => state.paginationAmount,
 
 }
 
 export const mutations = {
   SET_PAGINATION_AMOUNT(state, value) {
-    state.paginationCount = value
+    state.paginationAmount = value
   },
   CHANGE_CURRENT_PAGINATION(state, value) {
     state.currentPagination += value

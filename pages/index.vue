@@ -1,10 +1,12 @@
 <template>
   <div class="wrapper">
-    <div v-for="(filter, ind) in filterData">
-      FIND the {{ filter }}
+    filterData = {{ filterData }}
+    <div v-for="(filter, key, ind) in filterData">
+      Find the <span>{{ key }}</span> of movie
       <input type="text"
-             v-model="filterData"
-             :placeholder="`put the ${filter}`"
+             v-model="filterData[key]"
+             :placeholder="`put the ${key} of movie`"
+             @input="putFilters($event, key)"
       >
     </div>
 
@@ -18,7 +20,7 @@
         <th v-for="(title, ind) in HEADER_LIST"
             :key="ind"
         >
-          {{ title }}
+          movie {{ title }}
         </th>
       </tr>
       </thead>
@@ -33,10 +35,12 @@
     </table>
     <div class="footer">
       <input type="text"
-             v-model="paginationCount"
+             v-model="paginationAmount"
       >
-      <div> You realise the PAGINATION_COUNT = {{ GET_PAGINATION_AMOUNT }}</div>
-      <div>CURRENT_PAGINATION is {{ GET_CURRENT_PAGINATION }}</div>
+      <div> You can determinate the PAGINATION_AMOUNT = {{ GET_PAGINATION_AMOUNT }}</div>
+      <div>CURRENT_PAGINATION is {{ GET_CURRENT_PAGINATION }} of {{GET_PAGINATION_TOTAL}}</div>
+
+      <div>GET_PAGINATION_AMOUNT = {{GET_PAGINATION_AMOUNT}}</div>
       <div @click="turnPaginationAhead">turnPaginationAhead</div>
       <div @click="turnPaginationBack">turnPaginationBack</div>
     </div>
@@ -53,9 +57,10 @@ export default {
       FILTER_TYPES: 'GET_HEADER_LIST',
       GET_FILTERED_MOVIES_DATA: 'GET_FILTERED_MOVIES_DATA',
       GET_CURRENT_PAGINATION: 'GET_CURRENT_PAGINATION',
+      GET_PAGINATION_TOTAL: 'GET_PAGINATION_TOTAL',
       GET_PAGINATION_AMOUNT: 'GET_PAGINATION_AMOUNT'
     }),
-    paginationCount: {
+    paginationAmount: {
       get() {
         return this.GET_PAGINATION_AMOUNT
       },
@@ -63,17 +68,12 @@ export default {
         this.SET_PAGINATION_AMOUNT(value)
       }
     },
-    filterData: {
-      get() {
-        let filterList = {}
-        for(let field of this.HEADER_LIST) {
-          filterList = {...filterList, [field]: ''}
-        }
-        return filterList
-      },
-      set(value) {
-        this.SET_FILTER_DATA(value)
+    filterData() {
+      let filterList = {}
+      for(let field of this.HEADER_LIST) {
+        filterList = {...filterList, [field]: ''}
       }
+      return filterList
     }
   },
   methods: {
@@ -83,12 +83,15 @@ export default {
       'SET_PAGINATION_AMOUNT'
     ]),
     turnPaginationAhead() {
-      if(this.GET_CURRENT_PAGINATION < this.GET_PAGINATION_AMOUNT)
+      if(this.GET_CURRENT_PAGINATION < this.GET_PAGINATION_TOTAL)
         this.CHANGE_CURRENT_PAGINATION(1)
     },
     turnPaginationBack() {
       if(this.GET_CURRENT_PAGINATION > 1)
         this.CHANGE_CURRENT_PAGINATION(-1)
+    },
+    putFilters(ev, key) {
+      console.log('============', key, ev.target.value)
     }
   }
 }
