@@ -8,6 +8,7 @@
              :placeholder="`put the ${key} of movie`"
              @input="putFilters($event, key)"
       >
+      filter = {{filter}}
     </div>
 
     <hr>
@@ -40,7 +41,6 @@
       <div> You can determinate the PAGINATION_AMOUNT = {{ GET_PAGINATION_AMOUNT }}</div>
       <div>CURRENT_PAGINATION is {{ GET_CURRENT_PAGINATION }} of {{GET_PAGINATION_TOTAL}}</div>
 
-      <div>GET_PAGINATION_AMOUNT = {{GET_PAGINATION_AMOUNT}}</div>
       <div @click="turnPaginationAhead">turnPaginationAhead</div>
       <div @click="turnPaginationBack">turnPaginationBack</div>
     </div>
