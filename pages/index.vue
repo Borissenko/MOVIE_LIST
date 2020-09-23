@@ -1,14 +1,12 @@
 <template>
   <div class="wrapper">
-    filterData = {{ filterData }}
-    <div v-for="(filter, key, ind) in filterData">
+    <div v-for="(filter, key, ind) in filterFields" :key="'f' + ind">
       Find the <span>{{ key }}</span> of movie
       <input type="text"
              :placeholder="`put the ${key} of movie`"
              @input="putFilterToStore($event, key)"
       >
     </div>
-    <div>GET_FILTER_DATA = {{GET_FILTER_DATA}}</div>
 
     <hr>
     <table>
@@ -17,27 +15,26 @@
       </caption>
       <thead>
       <tr>
-        <th v-for="(title, ind) in HEADER_LIST"
-            :key="ind"
-        >
+        <th v-for="(title, ind) in HEADER_LIST" :key="'t' + ind">
           movie {{ title }}
         </th>
       </tr>
       </thead>
       <tbody>
-      <tr v-for="(movie, ind) in GET_FILTERED_MOVIES_DATA"
-          :key="'m' + ind"
-      >
-        <td>{{ movie.name }}</td>
-        <td>{{ movie.actor }}</td>
+      <tr v-for="(movie, ind) in GET_SLICED_END_FILTERED_MOVIES_DATA" :key="'m' + ind">
+        <td v-for="(movieField, ind) in HEADER_LIST" :key="'mf' + ind">
+          {{ movie[movieField] }}
+        </td>
       </tr>
       </tbody>
     </table>
+
+    <hr>
     <div class="footer">
+      <div> You can determinate the PAGINATION_AMOUNT</div>
       <input type="text"
-             v-model="paginationAmount"
+             v-model.number="paginationAmount"
       >
-      <div> You can determinate the PAGINATION_AMOUNT = {{ GET_PAGINATION_AMOUNT }}</div>
       <div>CURRENT_PAGINATION is {{ GET_CURRENT_PAGINATION }} of {{GET_PAGINATION_TOTAL}}</div>
 
       <div @click="turnPaginationAhead">turnPaginationAhead</div>
@@ -54,12 +51,11 @@ export default {
     ...mapGetters({
       HEADER_LIST: 'GET_HEADER_LIST',
       FILTER_TYPES: 'GET_HEADER_LIST',
-      GET_FILTERED_MOVIES_DATA: 'GET_FILTERED_MOVIES_DATA',
       GET_CURRENT_PAGINATION: 'GET_CURRENT_PAGINATION',
       GET_PAGINATION_TOTAL: 'GET_PAGINATION_TOTAL',
       GET_PAGINATION_AMOUNT: 'GET_PAGINATION_AMOUNT',
-
-      GET_FILTER_DATA: 'GET_FILTER_DATA'
+      GET_FILTER_DATA: 'GET_FILTER_DATA',
+      GET_SLICED_END_FILTERED_MOVIES_DATA: 'GET_SLICED_END_FILTERED_MOVIES_DATA',
     }),
     paginationAmount: {
       get() {
@@ -69,7 +65,7 @@ export default {
         this.SET_PAGINATION_AMOUNT(value)
       }
     },
-    filterData() {
+    filterFields() {
       let filterList = {}
       for(let field of this.HEADER_LIST) {
         filterList = {...filterList, [field]: ''}

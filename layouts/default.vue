@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <h1>muvie list</h1>
+    <h1>movie list</h1>
     <div>universal completely</div>
     <hr>
     <Nuxt />
