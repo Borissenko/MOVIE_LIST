@@ -4,12 +4,11 @@
     <div v-for="(filter, key, ind) in filterData">
       Find the <span>{{ key }}</span> of movie
       <input type="text"
-             v-model="filterData[key]"
              :placeholder="`put the ${key} of movie`"
-             @input="putFilters($event, key)"
+             @input="putFilterToStore($event, key)"
       >
-      filter = {{filter}}
     </div>
+    <div>GET_FILTER_DATA = {{GET_FILTER_DATA}}</div>
 
     <hr>
     <table>
@@ -58,7 +57,9 @@ export default {
       GET_FILTERED_MOVIES_DATA: 'GET_FILTERED_MOVIES_DATA',
       GET_CURRENT_PAGINATION: 'GET_CURRENT_PAGINATION',
       GET_PAGINATION_TOTAL: 'GET_PAGINATION_TOTAL',
-      GET_PAGINATION_AMOUNT: 'GET_PAGINATION_AMOUNT'
+      GET_PAGINATION_AMOUNT: 'GET_PAGINATION_AMOUNT',
+
+      GET_FILTER_DATA: 'GET_FILTER_DATA'
     }),
     paginationAmount: {
       get() {
@@ -78,7 +79,7 @@ export default {
   },
   methods: {
     ...mapMutations([
-      'SET_FILTER_DATA',
+      'SET_FILTER_VALUE',
       'CHANGE_CURRENT_PAGINATION',
       'SET_PAGINATION_AMOUNT'
     ]),
@@ -90,8 +91,8 @@ export default {
       if(this.GET_CURRENT_PAGINATION > 1)
         this.CHANGE_CURRENT_PAGINATION(-1)
     },
-    putFilters(ev, key) {
-      console.log('============', key, ev.target.value)
+    putFilterToStore(ev, key) {
+      this.SET_FILTER_VALUE({[key]: ev.target.value})
     }
   }
 }
